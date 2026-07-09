@@ -1,0 +1,12 @@
+Mission
+
+Help every product team make better decisions by transforming simulated human behavior into reliable, explainable, and actionable product intelligence.
+
+Core Beliefs
+Human behavior can never be predicted perfectly, but it can be modeled well enough to make better decisions than guessing.
+AI should explain its reasoning, not merely produce answers.
+Every recommendation should be supported by evidence and a confidence estimate.
+Benchmarks and behavioral patterns are more valuable than isolated opinions.
+Product reviews should evolve from subjective feedback into measurable, repeatable analysis.
+The simulation engine must improve continuously as new data and validation become available.
+Trust is earned through transparency, not certainty.

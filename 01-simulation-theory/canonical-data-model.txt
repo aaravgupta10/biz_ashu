@@ -1,0 +1,733 @@
+canonical-data-model.md
+# Canonical Data Model (CDM)
+
+Version: 0.1
+
+Status: Draft
+
+Owner: Core Architecture
+
+Dependencies:
+- overview.md
+- synthetic-human-model.md
+- behavioral-model.md
+- decision-engine.md
+
+Used By:
+- Every subsystem in the platform
+
+---
+
+# Purpose
+
+The Canonical Data Model defines the shared vocabulary of the Simulation Engine.
+
+Every component must exchange information using these canonical objects.
+
+This guarantees:
+
+- consistency
+- interoperability
+- explainability
+- versionability
+- extensibility
+
+The CDM is independent of implementation language, database technology, or API design.
+
+---
+
+# Design Principles
+
+Every object must satisfy five principles.
+
+## 1. Canonical
+
+There should only be one definition for each concept.
+
+Never create duplicate concepts.
+
+---
+
+## 2. Immutable History
+
+Objects should preserve historical state whenever possible.
+
+---
+
+## 3. Extensible
+
+New properties may be added.
+
+Existing meaning must never change.
+
+---
+
+## 4. Explainable
+
+Every object should be understandable by humans.
+
+---
+
+## 5. Versioned
+
+Every object supports schema evolution.
+
+---
+
+# Core Object Hierarchy
+
+Workspace
+
+↓
+
+Project
+
+↓
+
+Artifact
+
+↓
+
+Environment
+
+↓
+
+Simulation
+
+↓
+
+Behavior Trace
+
+↓
+
+Insight
+
+↓
+
+Recommendation
+
+↓
+
+Report
+
+Object 1 — Workspace
+
+Represents
+
+A company.
+
+Contains
+
+Users
+
+Projects
+
+Billing
+
+Settings
+
+Benchmarks
+
+History
+
+Object 2 — Project
+
+Represents
+
+One analysis target.
+
+Examples
+
+Website
+
+Landing Page
+
+Mobile App
+
+Prototype
+
+Figma
+
+Each Project owns
+
+Artifacts
+
+Simulations
+
+Reports
+
+Object 3 — Artifact
+
+One input source.
+
+Examples
+
+Website URL
+
+Screenshot
+
+Figma File
+
+PDF
+
+Video
+
+Prototype
+
+DOM Snapshot
+
+CSS Snapshot
+
+Artifact is immutable.
+
+Never edited.
+
+Only replaced.
+
+Object 4 — Environment
+
+This is huge.
+
+The Environment is
+
+what the synthetic human experiences.
+
+Not HTML.
+
+Not pixels.
+
+A structured world.
+
+Environment contains
+
+Pages
+
+Elements
+
+Navigation Graph
+
+Visual Tree
+
+Interaction Graph
+
+Content
+
+Accessibility
+
+Assets
+
+Everything observable.
+
+Object 5 — Page
+
+A single navigable surface.
+
+Contains
+
+Sections
+
+Elements
+
+Metadata
+
+Navigation
+
+Performance
+
+Accessibility
+
+Relationships
+
+Object 6 — Section
+
+Examples
+
+Hero
+
+Pricing
+
+Testimonials
+
+FAQ
+
+Footer
+
+Navigation
+
+Forms
+
+Each section owns
+
+Elements.
+
+Object 7 — Element
+
+The atomic UI object.
+
+Examples
+
+Button
+
+Heading
+
+Paragraph
+
+Input
+
+Dropdown
+
+Image
+
+Video
+
+Card
+
+Accordion
+
+Table
+
+Element Properties
+
+Type
+
+Position
+
+Visibility
+
+Contrast
+
+Importance
+
+Interaction
+
+Text
+
+Style
+
+Hierarchy
+
+Object 8 — Synthetic Human
+
+Already defined elsewhere.
+
+Represents
+
+One simulated individual.
+
+Contains
+
+Identity
+
+Behavior
+
+Goals
+
+Memory
+
+State
+
+Beliefs
+
+Object 9 — Simulation
+
+One execution.
+
+Contains
+
+Synthetic Human
+
+Environment
+
+Behavior Trace
+
+Decisions
+
+Metrics
+
+Termination Reason
+
+Duration
+
+Confidence
+
+Object 10 — Behavior Trace
+
+Probably one of the most valuable objects.
+
+Stores
+
+Every meaningful event.
+
+Example
+
+Observe
+
+↓
+
+Read Hero
+
+↓
+
+Ignore CTA
+
+↓
+
+Scroll
+
+↓
+
+Read Pricing
+
+↓
+
+Confused
+
+↓
+
+Open FAQ
+
+↓
+
+Leave
+
+Every event timestamped.
+
+Object 11 — Behavior Event
+
+Atomic event.
+
+Examples
+
+Attention Shift
+
+Click
+
+Hover
+
+Read
+
+Ignore
+
+Confusion
+
+Trust Gain
+
+Trust Loss
+
+Hesitation
+
+Navigation
+
+Exit
+
+Everything becomes an event.
+
+Object 12 — Insight
+
+An aggregated observation.
+
+Example
+
+68% of technical founders failed to notice Pricing.
+
+Insight contains
+
+Evidence
+
+Supporting simulations
+
+Confidence
+
+Severity
+
+Benchmark comparison
+
+Object 13 — Recommendation
+
+Generated from one or more insights.
+
+Contains
+
+Problem
+
+Evidence
+
+Expected impact
+
+Implementation effort
+
+Priority
+
+Confidence
+
+Reasoning
+
+Suggested fix
+
+Dependencies
+
+Object 14 — Benchmark
+
+Represents
+
+Knowledge learned across all analyses.
+
+Examples
+
+Median hero height
+
+Average CTA count
+
+Average signup fields
+
+Average scroll depth
+
+Industry averages
+
+This object becomes
+
+Our moat.
+
+Object 15 — Report
+
+Final deliverable.
+
+Contains
+
+Executive Summary
+
+Insights
+
+Recommendations
+
+Benchmarks
+
+Heatmaps
+
+Simulation Statistics
+
+Exports
+
+Version
+
+Relationships
+
+Workspace
+
+↓
+
+Projects
+
+↓
+
+Artifacts
+
+↓
+
+Environment
+
+↓
+
+Pages
+
+↓
+
+Sections
+
+↓
+
+Elements
+
+↓
+
+Simulation
+
+↓
+
+Behavior Trace
+
+↓
+
+Insights
+
+↓
+
+Recommendations
+
+↓
+
+Report
+
+Object Lifecycle
+
+Artifact Uploaded
+
+↓
+
+Observation
+
+↓
+
+Environment Created
+
+↓
+
+Simulation Starts
+
+↓
+
+Behavior Events Recorded
+
+↓
+
+Insights Generated
+
+↓
+
+Recommendations Produced
+
+↓
+
+Report Published
+
+↓
+
+Benchmarks Updated
+
+Universal Metadata
+
+Every object contains
+
+ID
+
+Version
+
+Created At
+
+Updated At
+
+Source
+
+Confidence
+
+Tags
+
+Relationships
+
+Schema Version
+
+Owner
+
+Serialization
+
+Every object must be serializable into
+
+JSON
+
+Protocol Buffers
+
+Database
+
+API Response
+
+Event Stream
+
+without losing semantic meaning.
+
+Design Rules
+
+Objects never perform reasoning.
+
+Objects only contain data.
+
+Reasoning belongs to engines.
+
+This separation is mandatory.
+
+
+---
+
+# Now here's the biggest thing I want to change.
+
+I think we've accidentally started designing a traditional software system.
+
+I don't think this should be one.
+
+I think this should be an **event-driven platform**.
+
+Instead of:
+
+
+Crawler
+
+↓
+
+Database
+
+↓
+
+Simulation
+
+↓
+
+Report
+
+
+Think
+
+
+ArtifactUploaded
+
+↓
+
+ObservationCompleted
+
+↓
+
+EnvironmentCreated
+
+↓
+
+SimulationStarted
+
+↓
+
+SimulationCompleted
+
+↓
+
+InsightsGenerated
+
+↓
+
+RecommendationsGenerated
+
+↓
+
+ReportPublished
+
+
+Every stage emits events.
+
+Every stage listens to events.
+
+That architecture has enormous benefits:
+
+- easier scaling,
+- retry failed jobs,
+- parallel simulations,
+- real-time progress updates,
+- easier observability,
+- cleaner AI orchestration.
+
+## One final proposal—and I think it's the biggest architectural decision we've made so far.
+
+I don't think we're building a web application.
+
+I think we're building a **simulation operating system**.
+
+Everything we've defined so far—the Synthetic Human Model, Behavioral Model, Decision Engine, Canonical Data Model—looks much closer to the internals of a game engine than a CRUD SaaS.
+
+That realization should influence every engineering decision going forward. Instead of asking, "What's the next API endpoint?", we should ask, "What subsystem does the simulation OS need next?"
+
+If we keep that mindset, I think the architecture will remain coherent even as the product grows far beyond the initial SaaS use case.

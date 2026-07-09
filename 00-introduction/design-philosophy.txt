@@ -1,0 +1,23 @@
+Design Philosophy
+
+The engine is designed around five foundational principles:
+
+Observe deeply
+
+Collect every meaningful signal from a digital experience rather than relying on screenshots or HTML alone.
+
+Simulate broadly
+
+Model a wide spectrum of users with diverse goals, constraints, backgrounds, and behaviors.
+
+Reason systematically
+
+Separate observation, behavioral simulation, benchmarking, and recommendation into distinct stages with explicit responsibilities.
+
+Explain clearly
+
+Every insight should include supporting evidence, confidence, and reasoning that users can understand and evaluate.
+
+Learn continuously
+
+Improve simulation quality by comparing predictions with real-world outcomes whenever possible.

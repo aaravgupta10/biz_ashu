@@ -1,0 +1,437 @@
+Purpose
+
+Defines how synthetic humans transform observations into decisions.
+
+The Decision Engine is responsible for selecting actions based on:
+
+observations
+goals
+beliefs
+behavioral traits
+internal state
+memory
+utility optimization
+
+The engine intentionally separates reasoning from action selection.
+
+Architecture
+Observe
+
+↓
+
+Perceive
+
+↓
+
+Update Beliefs
+
+↓
+
+Generate Candidate Actions
+
+↓
+
+Evaluate Utilities
+
+↓
+
+Rank Actions
+
+↓
+
+Select Action
+
+↓
+
+Execute
+
+↓
+
+Update Memory
+Step 1
+
+Observation
+
+Receives
+
+Visual hierarchy
+
+Buttons
+
+Copy
+
+Pricing
+
+Forms
+
+Navigation
+
+etc.
+
+No reasoning.
+
+Step 2
+
+Perception
+
+Transforms
+
+Objects
+
+↓
+
+Meaning
+
+Example
+
+Blue Button
+
+↓
+
+Primary CTA
+
+↓
+
+Looks Clickable
+
+↓
+
+High Visibility
+Step 3
+
+Belief Update
+
+The synthetic human updates beliefs.
+
+Example
+
+Old Trust
+
+42%
+
+↓
+
+Reads testimonials
+
+↓
+
+Trust
+
+68%
+
+Another
+
+Old Trust
+
+70%
+
+↓
+
+Grammar mistake
+
+↓
+
+Trust
+
+61%
+
+Beliefs evolve.
+
+Step 4
+
+Candidate Action Generation
+
+Possible actions
+
+Click CTA
+
+Scroll
+
+Read FAQ
+
+Watch Video
+
+Leave
+
+Compare Pricing
+
+Open Docs
+
+Ignore
+
+Go Back
+
+The engine should never evaluate
+
+every possible action.
+
+Only plausible ones.
+
+Step 5
+
+Utility Evaluation
+
+This is the mathematical heart.
+
+Every action receives
+
+Expected Value
+
+Goal Alignment
+
+Trust
+
+Risk
+
+Effort
+
+Time
+
+Cognitive Load
+
+Curiosity
+
+Frustration
+
+Opportunity Cost
+
+Each weighted differently.
+
+Example
+
+Click Pricing
+
+Utility
+
+83
+
+Scroll
+
+64
+
+Leave
+
+41
+
+Signup
+
+52
+Step 6
+
+Behavior Selection
+
+Don't always choose
+
+Highest Utility.
+
+Humans aren't robots.
+
+Instead
+
+Sample probabilistically.
+
+Example
+
+83
+
+↓
+
+67%
+
+64
+
+↓
+
+24%
+
+52
+
+↓
+
+7%
+
+41
+
+↓
+
+2%
+
+Now users become diverse.
+
+Step 7
+
+Execute
+
+The selected action changes
+
+Environment
+
+↓
+
+Internal State
+
+↓
+
+Beliefs
+
+↓
+
+Memory
+
+Loop repeats.
+
+Belief Model
+
+Every synthetic human maintains
+
+Trust
+
+Product Understanding
+
+Expected Value
+
+Expected Difficulty
+
+Price Fairness
+
+Brand Credibility
+
+Likelihood of Success
+
+Personal Relevance
+
+Urgency
+
+Commitment
+
+These become latent variables.
+
+Decision Styles
+
+Not everyone decides the same way.
+
+Some users are
+
+Analytical.
+
+Others
+
+Emotional.
+
+Others
+
+Impulsive.
+
+Others
+
+Risk averse.
+
+Each style changes the weighting function.
+
+Rationality
+
+This is important.
+
+Humans aren't perfectly rational.
+
+Introduce bounded rationality.
+
+Users
+
+Forget
+
+Misread
+
+Skip
+
+Misclick
+
+Misinterpret
+
+Get distracted
+
+Otherwise
+
+The simulations become unrealistic.
+
+Memory
+
+Memory shouldn't just store events.
+
+It should store
+
+Importance.
+
+Example
+
+Hidden pricing
+
+Importance
+
+High
+
+↓
+
+Remember
+
+Longer
+
+Small typo
+
+↓
+
+Low importance
+
+↓
+
+Forgotten quickly
+
+Reflection
+
+This is where we finally use an LLM.
+
+Every few actions
+
+The LLM reflects.
+
+Example
+
+I've spent 3 minutes.
+
+↓
+
+Still don't understand.
+
+↓
+
+Confidence dropping.
+
+↓
+
+Perhaps leave.
+
+Reflection
+
+Not every step.
+
+Maybe every
+
+5–10 actions.
+
+This massively reduces cost.
+
+Termination
+
+Simulation stops when
+
+Goal achieved
+
+Leave
+
+Timeout
+
+Patience exhausted
+
+Trust collapses
+
+Utility below threshold

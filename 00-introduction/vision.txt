@@ -1,0 +1,11 @@
+Build the world's most trusted AI-powered human behavior simulation engine, enabling teams to understand, validate, and improve digital experiences before they ever reach real users.
+
+We believe that every digital experience—from a startup landing page to enterprise software—should be stress-tested before launch. Today, businesses rely on analytics after users arrive, usability testing with small sample sizes, or generic AI feedback that lacks behavioral depth.
+
+We envision a future where product teams can simulate thousands of realistic user journeys, uncover hidden friction, benchmark against industry standards, and receive evidence-backed recommendations before deploying changes.
+
+Our long-term ambition is to establish a new category: Predictive Product Intelligence.
+
+Instead of asking "What happened?" after launch, teams should be able to ask "What is likely to happen, why, and what should we improve before users arrive?"
+
+Our simulation engine is designed not to replace real users, but to dramatically reduce uncertainty before products reach them.

@@ -1,0 +1,36 @@
+Non-Goals
+
+The engine is not intended to:
+
+Guarantee conversion increases.
+Replace real usability testing.
+Replace analytics platforms.
+Replace A/B testing.
+Act as a generic chatbot.
+Generate arbitrary opinions without evidence.
+Optimize solely for engagement at the expense of user experience.
+This is where I'll push you.
+
+I think we should stop calling this a "user simulator."
+
+That's one subsystem.
+
+I think we're creating something much bigger.
+
+I'd call it:
+
+Predictive Product Intelligence Engine
+
+The simulation engine is the heart.
+
+But the product is about helping companies make better decisions before launch.
+
+That positioning gives us room to expand into:
+
+release readiness,
+onboarding analysis,
+pricing optimization,
+UX benchmarking,
+design validation,
+accessibility,
+and much more without changing our identity.
