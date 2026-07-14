@@ -19,7 +19,8 @@
   },
   "dependencies": {
     "@platform/core": "workspace:*",
-    "@platform/shared": "workspace:*"
+    "@platform/shared": "workspace:*",
+    "parse5": "^7.2.1"
   },
   "devDependencies": {
     "typescript": "^5.7.3",

@@ -1,4 +1,5 @@
 export * from './html-loader.js';
+export * from './dom-parser.js';
 import { DigitalTwin } from '@platform/core';
 import { generateId } from '@platform/shared';
 

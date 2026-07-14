@@ -29,6 +29,7 @@ desktop.ini
 *.njsproj
 *.sln
 *.sw?
+*.tsbuildinfo
 
 # Environment files
 .env
