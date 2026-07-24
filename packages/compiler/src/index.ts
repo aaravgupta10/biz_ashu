@@ -2,6 +2,8 @@ export * from './html-loader.js';
 export * from './dom-parser.js';
 export * from './raw-element.js';
 export * from './raw-element-extractor.js';
+export * from './semantic-node.js';
+export * from './semantic-classifier.js';
 import { DigitalTwin } from '@platform/core';
 import { generateId } from '@platform/shared';
 
