@@ -4,6 +4,9 @@ export * from './raw-element.js';
 export * from './raw-element-extractor.js';
 export * from './semantic-node.js';
 export * from './semantic-classifier.js';
+export * from './graph-builder.js';
+export * from './interaction-affordance.js';
+export * from './interaction-compiler.js';
 import { DigitalTwin } from '@platform/core';
 import { generateId } from '@platform/shared';
 
