@@ -1,5 +1,7 @@
 export * from './friction-detector.js';
 export * from './recommendation-generator.js';
+export * from './variant-generator.js';
+export * from './variant-comparator.js';
 
 import { CognitiveState } from '@platform/core';
 import { generateId } from '@platform/shared';

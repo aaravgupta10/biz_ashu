@@ -18,6 +18,8 @@ import {
   detectFrictionPatterns,
   generateProductRecommendations,
   generateRecommendations,
+  generatePageVariant,
+  compareSimulationVariants,
 } from '@platform/recommendation';
 
 const fastify = Fastify({
@@ -208,6 +210,80 @@ fastify.post('/api/simulate-site', async (request) => {
     site: site.toJSON(),
     persona: persona.toJSON(),
     trace,
+  };
+});
+
+fastify.post('/api/generate-variant', async (request) => {
+  const body = (request.body as SimulateRequestBody) || {};
+  const htmlInput = body.html && body.html.trim() !== '' ? body.html : DEFAULT_SAMPLE_HTML;
+
+  // 1. Run Original Journey (Variant A)
+  const domTreeA = parseHtml(htmlInput);
+  const rawElementsA = extractRawElements(domTreeA);
+  const semanticNodesA = classifyRawElements(rawElementsA);
+  const pageA = buildPageGraph(semanticNodesA, { name: 'Original Page' });
+  const affordancesA = extractAllAffordances(semanticNodesA);
+
+  const persona = ImmutablePersona.create({
+    id: generateId(),
+    name: body.personaName || 'A/B Tester Persona',
+    role: 'User',
+    personality: {
+      openness: 0.6,
+      conscientiousness: 0.8,
+      extraversion: 0.5,
+      agreeableness: 0.6,
+      neuroticism: 0.3,
+    },
+    cognitiveTraits: {
+      technicalFluency: 0.8,
+      domainFamiliarity: 0.75,
+      patienceThreshold: 0.5,
+      attentionSpan: 0.6,
+      visualAcuity: 0.85,
+      riskTolerance: 0.6,
+    },
+    demographics: {},
+    metadata: {},
+  });
+
+  const traceA = runSimulationSession({
+    page: pageA,
+    persona,
+    affordances: affordancesA,
+    maxSteps: 10,
+  });
+  const frictionPatterns = detectFrictionPatterns(traceA, pageA);
+  const recommendations = generateProductRecommendations(frictionPatterns);
+
+  // 2. Generate Optimized Variant B
+  const variantResult = generatePageVariant(htmlInput, recommendations);
+
+  // 3. Run Optimized Journey (Variant B)
+  const domTreeB = parseHtml(variantResult.variantHtml);
+  const rawElementsB = extractRawElements(domTreeB);
+  const semanticNodesB = classifyRawElements(rawElementsB);
+  const pageB = buildPageGraph(semanticNodesB, { name: 'Optimized Variant B Page' });
+  const affordancesB = extractAllAffordances(semanticNodesB);
+
+  const traceB = runSimulationSession({
+    page: pageB,
+    persona,
+    affordances: affordancesB,
+    maxSteps: 10,
+  });
+
+  // 4. Compare Telemetry & Calculate Verified Lift
+  const comparisonReport = compareSimulationVariants(traceA, traceB);
+
+  return {
+    originalHtml: htmlInput,
+    variantHtml: variantResult.variantHtml,
+    appliedTransformations: variantResult.appliedTransformations,
+    originalTrace: traceA,
+    variantTrace: traceB,
+    recommendations,
+    comparisonReport,
   };
 });
 
