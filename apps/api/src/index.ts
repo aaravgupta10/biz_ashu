@@ -13,6 +13,7 @@ import {
   type SitePageInput,
 } from '@platform/compiler';
 import { runSimulationSession, runMultiPageSimulationSession } from '@platform/runtime';
+import { calculateVisualAttentionHeatmap } from '@platform/cognition';
 import { calculateDiscrepancy } from '@platform/calibration';
 import {
   detectFrictionPatterns,
@@ -284,6 +285,47 @@ fastify.post('/api/generate-variant', async (request) => {
     variantTrace: traceB,
     recommendations,
     comparisonReport,
+  };
+});
+
+fastify.post('/api/attention-heatmap', async (request) => {
+  const body = (request.body as SimulateRequestBody) || {};
+  const htmlInput = body.html && body.html.trim() !== '' ? body.html : DEFAULT_SAMPLE_HTML;
+
+  const domTree = parseHtml(htmlInput);
+  const rawElements = extractRawElements(domTree);
+  const semanticNodes = classifyRawElements(rawElements);
+  const page = buildPageGraph(semanticNodes, { name: 'Heatmap Page Target' });
+
+  const persona = ImmutablePersona.create({
+    id: generateId(),
+    name: body.personaName || 'Visual Scanner',
+    role: 'User',
+    personality: {
+      openness: 0.6,
+      conscientiousness: 0.7,
+      extraversion: 0.5,
+      agreeableness: 0.6,
+      neuroticism: 0.3,
+    },
+    cognitiveTraits: {
+      technicalFluency: 0.8,
+      domainFamiliarity: 0.75,
+      patienceThreshold: 0.6,
+      attentionSpan: 0.7,
+      visualAcuity: 0.85,
+      riskTolerance: 0.6,
+    },
+    demographics: {},
+    metadata: {},
+  });
+
+  const heatmapData = calculateVisualAttentionHeatmap(page, persona);
+
+  return {
+    page,
+    persona: persona.toJSON(),
+    heatmap: heatmapData,
   };
 });
 

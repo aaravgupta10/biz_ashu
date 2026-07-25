@@ -1,6 +1,7 @@
 export * from './perception-engine.js';
 export * from './goal-generator.js';
 export * from './decision-engine.js';
+export * from './attention-heatmap.js';
 import { generateId } from '@platform/shared';
 
 export interface CognitionTraceInput {
