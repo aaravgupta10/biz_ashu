@@ -12,9 +12,14 @@
     "lint": "eslint src/"
   },
   "dependencies": {
+    "@platform/calibration": "workspace:*",
+    "@platform/cognition": "workspace:*",
+    "@platform/compiler": "workspace:*",
     "@platform/core": "workspace:*",
     "@platform/recommendation": "workspace:*",
+    "@platform/runtime": "workspace:*",
     "@platform/shared": "workspace:*",
+    "@fastify/cors": "^10.0.2",
     "fastify": "^5.2.1"
   },
   "devDependencies": {

@@ -6,9 +6,13 @@
     "composite": true
   },
   "references": [
+    { "path": "../../packages/calibration" },
+    { "path": "../../packages/cognition" },
+    { "path": "../../packages/compiler" },
     { "path": "../../packages/core" },
-    { "path": "../../packages/shared" },
-    { "path": "../../packages/recommendation" }
+    { "path": "../../packages/recommendation" },
+    { "path": "../../packages/runtime" },
+    { "path": "../../packages/shared" }
   ],
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]

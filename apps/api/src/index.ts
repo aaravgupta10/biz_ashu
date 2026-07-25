@@ -1,19 +1,59 @@
 import Fastify from 'fastify';
-import { PLATFORM_VERSION } from '@platform/shared';
-import { ImmutableCognitiveState } from '@platform/core';
-import { generateRecommendations } from '@platform/recommendation';
+import cors from '@fastify/cors';
+import { PLATFORM_VERSION, generateId } from '@platform/shared';
+import { ImmutablePersona, ImmutableCognitiveState } from '@platform/core';
+import {
+  parseHtml,
+  extractRawElements,
+  classifyRawElements,
+  buildPageGraph,
+  extractAllAffordances,
+  validateDigitalTwinPage,
+  compileSiteGraph,
+  type SitePageInput,
+} from '@platform/compiler';
+import { runSimulationSession, runMultiPageSimulationSession } from '@platform/runtime';
+import { calculateDiscrepancy } from '@platform/calibration';
+import {
+  detectFrictionPatterns,
+  generateProductRecommendations,
+  generateRecommendations,
+} from '@platform/recommendation';
 
 const fastify = Fastify({
-  logger: {
-    transport: {
-      target: 'pino-pretty',
-      options: {
-        translateTime: 'HH:MM:ss Z',
-        ignore: 'pid,hostname',
-      },
-    },
-  },
+  logger: true,
 });
+
+await fastify.register(cors, { origin: true });
+
+const DEFAULT_SAMPLE_HTML = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Express Checkout</title>
+</head>
+<body>
+  <header>
+    <h1>Complete Your Purchase</h1>
+  </header>
+  <main>
+    <form id="checkout-form" action="/submit-order" method="POST">
+      <label for="email">Email Address</label>
+      <input type="email" id="email" name="email" required />
+
+      <label for="card">Credit Card Number</label>
+      <input type="text" id="card" name="card" required />
+
+      <button type="submit" id="pay-button">Pay Now ($49.00)</button>
+    </form>
+  </main>
+  <footer>
+    <a href="/terms">Terms of Service</a>
+  </footer>
+</body>
+</html>
+`;
 
 fastify.get('/health', async () => {
   return {
@@ -33,6 +73,142 @@ fastify.get('/demo-recommendation', async () => {
 
   const recommendations = generateRecommendations(dummyState);
   return { recommendations };
+});
+
+interface SimulateRequestBody {
+  html?: string;
+  personaName?: string;
+  maxSteps?: number;
+}
+
+fastify.post('/api/simulate', async (request) => {
+  const body = (request.body as SimulateRequestBody) || {};
+  const htmlInput = body.html && body.html.trim() !== '' ? body.html : DEFAULT_SAMPLE_HTML;
+  const maxSteps = body.maxSteps || 10;
+
+  // 1. Compile HTML to Digital Twin
+  const domTree = parseHtml(htmlInput);
+  const rawElements = extractRawElements(domTree);
+  const semanticNodes = classifyRawElements(rawElements);
+  const page = buildPageGraph(semanticNodes, {
+    id: generateId(),
+    name: 'Target Page',
+    route: '/checkout',
+    purpose: 'Complete purchase conversion',
+  });
+  const affordances = extractAllAffordances(semanticNodes);
+  const validation = validateDigitalTwinPage(page, affordances);
+
+  // 2. Instantiate Synthetic Human Persona
+  const persona = ImmutablePersona.create({
+    id: generateId(),
+    name: body.personaName || 'Standard Shopper',
+    role: 'Customer',
+    personality: {
+      openness: 0.6,
+      conscientiousness: 0.7,
+      extraversion: 0.5,
+      agreeableness: 0.6,
+      neuroticism: 0.3,
+    },
+    cognitiveTraits: {
+      technicalFluency: 0.75,
+      domainFamiliarity: 0.7,
+      patienceThreshold: 0.55,
+      attentionSpan: 0.65,
+      visualAcuity: 0.8,
+      riskTolerance: 0.6,
+    },
+    demographics: {},
+    metadata: {},
+  });
+
+  // 3. Execute Simulation Session
+  const trace = runSimulationSession({
+    page,
+    persona,
+    affordances,
+    maxSteps,
+  });
+
+  // 4. Calculate Empirical Calibration Metrics
+  const empirical = {
+    pageId: page.id,
+    targetDropOffRate: 0.1,
+    averageTimeOnPageMs: 1500,
+    averageStepsToConversion: 3,
+    completionRate: 0.9,
+  };
+  const discrepancy = calculateDiscrepancy([trace], empirical);
+
+  // 5. Detect Friction & Generate Product Recommendations
+  const frictionPatterns = detectFrictionPatterns(trace, page);
+  const recommendations = generateProductRecommendations(frictionPatterns);
+
+  return {
+    page,
+    validation,
+    persona: persona.toJSON(),
+    trace,
+    discrepancy,
+    frictionPatterns,
+    recommendations,
+  };
+});
+
+interface SimulateSiteRequestBody {
+  siteName?: string;
+  entryRoute?: string;
+  pages?: SitePageInput[];
+  personaName?: string;
+  maxTotalSteps?: number;
+}
+
+fastify.post('/api/simulate-site', async (request) => {
+  const body = (request.body as SimulateSiteRequestBody) || {};
+  const siteName = body.siteName || 'Multi-Page Application';
+  const entryRoute = body.entryRoute || '/';
+  const pagesInput = body.pages || [
+    { route: '/', html: DEFAULT_SAMPLE_HTML, name: 'Checkout Page' },
+  ];
+
+  const { site, affordancesByRoute } = compileSiteGraph(siteName, entryRoute, pagesInput);
+
+  const persona = ImmutablePersona.create({
+    id: generateId(),
+    name: body.personaName || 'Multi-Page Navigator',
+    role: 'User',
+    personality: {
+      openness: 0.7,
+      conscientiousness: 0.75,
+      extraversion: 0.5,
+      agreeableness: 0.6,
+      neuroticism: 0.25,
+    },
+    cognitiveTraits: {
+      technicalFluency: 0.8,
+      domainFamiliarity: 0.75,
+      patienceThreshold: 0.6,
+      attentionSpan: 0.7,
+      visualAcuity: 0.85,
+      riskTolerance: 0.65,
+    },
+    demographics: {},
+    metadata: {},
+  });
+
+  const trace = runMultiPageSimulationSession({
+    site,
+    persona,
+    affordancesByRoute,
+    maxTotalSteps: body.maxTotalSteps || 25,
+  });
+
+  return {
+    site: site.toJSON(),
+    persona: persona.toJSON(),
+    trace,
+  };
 });
 
 const start = async () => {
