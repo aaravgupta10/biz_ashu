@@ -7,6 +7,7 @@ export * from './semantic-classifier.js';
 export * from './graph-builder.js';
 export * from './interaction-affordance.js';
 export * from './interaction-compiler.js';
+export * from './twin-validator.js';
 import { DigitalTwin } from '@platform/core';
 import { generateId } from '@platform/shared';
 
