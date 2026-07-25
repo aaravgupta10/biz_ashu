@@ -119,6 +119,9 @@ importers:
 
   packages/cognition:
     dependencies:
+      '@platform/compiler':
+        specifier: workspace:*
+        version: link:../compiler
       '@platform/core':
         specifier: workspace:*
         version: link:../core

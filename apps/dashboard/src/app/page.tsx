@@ -1,14 +1,16 @@
 import React from 'react';
 import { PLATFORM_VERSION } from '@platform/shared';
+import { ImmutableCognitiveState } from '@platform/core';
 import { generateRecommendations } from '@platform/recommendation';
 
 export default function HomePage() {
-  const dummyState = {
+  const dummyState = ImmutableCognitiveState.create({
     id: 'dashboard-state-uuid',
-    traceId: 'dashboard-trace-uuid',
-    inferences: ['user read CTA text', 'user paused over pricing plan'],
-    confidence: 0.94,
-  };
+    personaId: 'persona-dashboard-uuid',
+    activeGoal: 'Explore pricing plans',
+    frustrationLevel: 0.15,
+    trustLevel: 0.85,
+  });
 
   const recommendations = generateRecommendations(dummyState);
 

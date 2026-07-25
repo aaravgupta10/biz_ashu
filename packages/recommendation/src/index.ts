@@ -1,4 +1,4 @@
-import { CognitiveState } from '@platform/cognition';
+import { CognitiveState } from '@platform/core';
 import { generateId } from '@platform/shared';
 
 export interface Recommendation {

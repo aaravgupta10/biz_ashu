@@ -1,14 +1,18 @@
+export * from './perception-engine.js';
+export * from './goal-generator.js';
+export * from './decision-engine.js';
+
 import { TraceRecord } from '@platform/runtime';
 import { generateId } from '@platform/shared';
 
-export interface CognitiveState {
+export interface CognitionAnalysisResult {
   id: string;
   traceId: string;
   inferences: string[];
   confidence: number;
 }
 
-export function analyzeTraceRecord(record: TraceRecord): CognitiveState {
+export function analyzeTraceRecord(record: TraceRecord): CognitionAnalysisResult {
   return {
     id: generateId(),
     traceId: record.traceId,

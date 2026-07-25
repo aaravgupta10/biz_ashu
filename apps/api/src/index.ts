@@ -1,5 +1,6 @@
 import Fastify from 'fastify';
 import { PLATFORM_VERSION } from '@platform/shared';
+import { ImmutableCognitiveState } from '@platform/core';
 import { generateRecommendations } from '@platform/recommendation';
 
 const fastify = Fastify({
@@ -22,13 +23,13 @@ fastify.get('/health', async () => {
 });
 
 fastify.get('/demo-recommendation', async () => {
-  // Use duck typing to satisfy the parameter interface without direct import
-  const dummyState = {
+  const dummyState = ImmutableCognitiveState.create({
     id: 'state-uuid-example',
-    traceId: 'trace-uuid-example',
-    inferences: ['user hovered over hero image', 'user scroll speed decreased'],
-    confidence: 0.88,
-  };
+    personaId: 'persona-uuid-example',
+    activeGoal: 'Complete Sign-up',
+    frustrationLevel: 0.2,
+    trustLevel: 0.8,
+  });
 
   const recommendations = generateRecommendations(dummyState);
   return { recommendations };
