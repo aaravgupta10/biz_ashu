@@ -5,7 +5,7 @@
     "rootDir": "./src",
     "composite": true
   },
-  "references": [{ "path": "../core" }, { "path": "../shared" }],
+  "references": [{ "path": "../core" }, { "path": "../shared" }, { "path": "../runtime" }],
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }

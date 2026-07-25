@@ -1,7 +1,10 @@
+export * from './discrepancy-calculator.js';
+export * from './parameter-optimizer.js';
+
 import { Simulation } from '@platform/core';
 import { generateId } from '@platform/shared';
 
-export interface CalibrationResult {
+export interface LegacyCalibrationResult {
   id: string;
   simulationId: string;
   discrepancyScore: number;
@@ -12,7 +15,7 @@ export interface CalibrationResult {
 export function calibrateSimulationModel(
   sim: Simulation,
   _empiricalData: Record<string, unknown>,
-): CalibrationResult {
+): LegacyCalibrationResult {
   return {
     id: generateId(),
     simulationId: sim.id,

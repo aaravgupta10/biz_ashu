@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@platform/core": "workspace:*",
+    "@platform/runtime": "workspace:*",
     "@platform/shared": "workspace:*"
   },
   "devDependencies": {
