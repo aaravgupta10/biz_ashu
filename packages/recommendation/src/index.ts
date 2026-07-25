@@ -1,7 +1,10 @@
+export * from './friction-detector.js';
+export * from './recommendation-generator.js';
+
 import { CognitiveState } from '@platform/core';
 import { generateId } from '@platform/shared';
 
-export interface Recommendation {
+export interface LegacyRecommendation {
   id: string;
   cognitiveStateId: string;
   type: 'layout' | 'content' | 'performance';
@@ -9,7 +12,7 @@ export interface Recommendation {
   expectedLift: number;
 }
 
-export function generateRecommendations(state: CognitiveState): Recommendation[] {
+export function generateRecommendations(state: CognitiveState): LegacyRecommendation[] {
   return [
     {
       id: generateId(),

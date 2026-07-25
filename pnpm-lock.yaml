@@ -176,9 +176,15 @@ importers:
       '@platform/cognition':
         specifier: workspace:*
         version: link:../cognition
+      '@platform/compiler':
+        specifier: workspace:*
+        version: link:../compiler
       '@platform/core':
         specifier: workspace:*
         version: link:../core
+      '@platform/runtime':
+        specifier: workspace:*
+        version: link:../runtime
       '@platform/shared':
         specifier: workspace:*
         version: link:../shared

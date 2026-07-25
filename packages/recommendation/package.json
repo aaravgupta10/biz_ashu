@@ -19,7 +19,9 @@
   },
   "dependencies": {
     "@platform/cognition": "workspace:*",
+    "@platform/compiler": "workspace:*",
     "@platform/core": "workspace:*",
+    "@platform/runtime": "workspace:*",
     "@platform/shared": "workspace:*"
   },
   "devDependencies": {
