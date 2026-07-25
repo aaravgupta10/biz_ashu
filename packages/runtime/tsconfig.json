@@ -5,7 +5,12 @@
     "rootDir": "./src",
     "composite": true
   },
-  "references": [{ "path": "../core" }, { "path": "../shared" }, { "path": "../compiler" }],
+  "references": [
+    { "path": "../cognition" },
+    { "path": "../compiler" },
+    { "path": "../core" },
+    { "path": "../shared" }
+  ],
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }

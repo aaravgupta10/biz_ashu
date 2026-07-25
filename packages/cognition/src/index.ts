@@ -1,9 +1,14 @@
 export * from './perception-engine.js';
 export * from './goal-generator.js';
 export * from './decision-engine.js';
-
-import { TraceRecord } from '@platform/runtime';
 import { generateId } from '@platform/shared';
+
+export interface CognitionTraceInput {
+  traceId: string;
+  simulationId?: string;
+  stepsCount?: number;
+  timestamp?: Date | string;
+}
 
 export interface CognitionAnalysisResult {
   id: string;
@@ -12,7 +17,7 @@ export interface CognitionAnalysisResult {
   confidence: number;
 }
 
-export function analyzeTraceRecord(record: TraceRecord): CognitionAnalysisResult {
+export function analyzeTraceRecord(record: CognitionTraceInput): CognitionAnalysisResult {
   return {
     id: generateId(),
     traceId: record.traceId,

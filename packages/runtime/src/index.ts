@@ -1,3 +1,6 @@
+export * from './trace-logger.js';
+export * from './simulation-engine.js';
+
 import { Simulation, SyntheticHuman } from '@platform/core';
 import { CompiledWorld } from '@platform/compiler';
 import { generateId } from '@platform/shared';

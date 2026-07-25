@@ -5,12 +5,7 @@
     "rootDir": "./src",
     "composite": true
   },
-  "references": [
-    { "path": "../compiler" },
-    { "path": "../core" },
-    { "path": "../shared" },
-    { "path": "../runtime" }
-  ],
+  "references": [{ "path": "../compiler" }, { "path": "../core" }, { "path": "../shared" }],
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }
