@@ -1,6 +1,8 @@
 export * from './trace-logger.js';
 export * from './simulation-engine.js';
 export * from './multi-page-engine.js';
+export * from './swarm-engine.js';
+export * from './swarm-analytics.js';
 
 import { Simulation, SyntheticHuman } from '@platform/core';
 import { CompiledWorld } from '@platform/compiler';

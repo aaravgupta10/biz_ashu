@@ -1,7 +1,12 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import { PLATFORM_VERSION, generateId } from '@platform/shared';
-import { ImmutablePersona, ImmutableCognitiveState } from '@platform/core';
+import {
+  ImmutablePersona,
+  ImmutableCognitiveState,
+  generateSyntheticPopulation,
+  type CohortType,
+} from '@platform/core';
 import {
   parseHtml,
   extractRawElements,
@@ -12,15 +17,28 @@ import {
   compileSiteGraph,
   type SitePageInput,
 } from '@platform/compiler';
-import { runSimulationSession, runMultiPageSimulationSession } from '@platform/runtime';
+import {
+  runSimulationSession,
+  runMultiPageSimulationSession,
+  runSwarmSimulationSession,
+  calculateSwarmAnalytics,
+} from '@platform/runtime';
 import { calculateVisualAttentionHeatmap } from '@platform/cognition';
-import { calculateDiscrepancy } from '@platform/calibration';
+import {
+  calculateDiscrepancy,
+  parsePostHogEvents,
+  runContinuousAutoTuner,
+  importEmpiricalClickstream,
+  type PostHogExportEvent,
+} from '@platform/calibration';
 import {
   detectFrictionPatterns,
   generateProductRecommendations,
   generateRecommendations,
   generatePageVariant,
   compareSimulationVariants,
+  runAutonomousOptimizer,
+  generateGitPullRequestPatch,
 } from '@platform/recommendation';
 
 const fastify = Fastify({
@@ -326,6 +344,144 @@ fastify.post('/api/attention-heatmap', async (request) => {
     page,
     persona: persona.toJSON(),
     heatmap: heatmapData,
+  };
+});
+
+interface SimulateSwarmRequestBody {
+  html?: string;
+  cohorts?: { cohortType: CohortType; count: number }[];
+  maxStepsPerSession?: number;
+}
+
+fastify.post('/api/simulate-swarm', async (request) => {
+  const body = (request.body as SimulateSwarmRequestBody) || {};
+  const htmlInput = body.html && body.html.trim() !== '' ? body.html : DEFAULT_SAMPLE_HTML;
+
+  const domTree = parseHtml(htmlInput);
+  const rawElements = extractRawElements(domTree);
+  const semanticNodes = classifyRawElements(rawElements);
+  const page = buildPageGraph(semanticNodes, { name: 'Swarm Target Page' });
+  const affordances = extractAllAffordances(semanticNodes);
+
+  const cohortConfigs = body.cohorts || [
+    { cohortType: 'gen_z_mobile' as CohortType, count: 5 },
+    { cohortType: 'senior_low_fluency' as CohortType, count: 5 },
+    { cohortType: 'impulsive_buyer' as CohortType, count: 5 },
+    { cohortType: 'enterprise_security' as CohortType, count: 5 },
+  ];
+
+  const population = generateSyntheticPopulation(cohortConfigs);
+
+  const swarmTrace = runSwarmSimulationSession({
+    page,
+    population,
+    affordances,
+    maxStepsPerSession: body.maxStepsPerSession || 10,
+  });
+
+  const swarmAnalytics = calculateSwarmAnalytics(swarmTrace);
+
+  return {
+    page,
+    totalPopulation: population.length,
+    swarmTrace,
+    swarmAnalytics,
+  };
+});
+
+fastify.post('/api/auto-optimize', async (request) => {
+  const body = (request.body as SimulateRequestBody) || {};
+  const htmlInput = body.html && body.html.trim() !== '' ? body.html : DEFAULT_SAMPLE_HTML;
+
+  const persona = ImmutablePersona.create({
+    id: generateId(),
+    name: body.personaName || 'Autonomous Optimizer',
+    role: 'User',
+    personality: {
+      openness: 0.6,
+      conscientiousness: 0.8,
+      extraversion: 0.5,
+      agreeableness: 0.6,
+      neuroticism: 0.3,
+    },
+    cognitiveTraits: {
+      technicalFluency: 0.8,
+      domainFamiliarity: 0.75,
+      patienceThreshold: 0.5,
+      attentionSpan: 0.6,
+      visualAcuity: 0.85,
+      riskTolerance: 0.6,
+    },
+    demographics: {},
+    metadata: {},
+  });
+
+  const optimizationResult = runAutonomousOptimizer({ html: htmlInput, persona });
+  const gitPatch = generateGitPullRequestPatch(
+    optimizationResult.originalHtml,
+    optimizationResult.optimizedHtml,
+    optimizationResult.verifiedLiftGain,
+  );
+
+  return {
+    optimizationResult,
+    gitPatch,
+  };
+});
+
+interface CalibrateLiveRequestBody {
+  posthogEvents?: PostHogExportEvent[];
+  personaName?: string;
+}
+
+fastify.post('/api/calibrate-live', async (request) => {
+  const body = (request.body as CalibrateLiveRequestBody) || {};
+  const samplePostHogEvents: PostHogExportEvent[] = body.posthogEvents || [
+    {
+      event: '$pageview',
+      distinct_id: 'user-1',
+      timestamp: new Date(Date.now() - 10000).toISOString(),
+    },
+    { event: 'submit_order', distinct_id: 'user-1', timestamp: new Date().toISOString() },
+    {
+      event: '$pageview',
+      distinct_id: 'user-2',
+      timestamp: new Date(Date.now() - 10000).toISOString(),
+    },
+    { event: 'abandon_cart', distinct_id: 'user-2', timestamp: new Date().toISOString() },
+  ];
+
+  const rawEvents = parsePostHogEvents(samplePostHogEvents);
+  const benchmark = importEmpiricalClickstream(rawEvents, 'live-target-page');
+
+  const persona = ImmutablePersona.create({
+    id: generateId(),
+    name: body.personaName || 'Live Calibrated Persona',
+    role: 'User',
+    personality: {
+      openness: 0.6,
+      conscientiousness: 0.7,
+      extraversion: 0.5,
+      agreeableness: 0.6,
+      neuroticism: 0.3,
+    },
+    cognitiveTraits: {
+      technicalFluency: 0.75,
+      domainFamiliarity: 0.7,
+      patienceThreshold: 0.55,
+      attentionSpan: 0.65,
+      visualAcuity: 0.8,
+      riskTolerance: 0.6,
+    },
+    demographics: {},
+    metadata: {},
+  });
+
+  const autoTuningResult = runContinuousAutoTuner(persona, benchmark, 10);
+
+  return {
+    benchmark,
+    autoTuningResult,
   };
 });
 

@@ -9,6 +9,7 @@ export * from './interaction-affordance.js';
 export * from './interaction-compiler.js';
 export * from './twin-validator.js';
 export * from './site-compiler.js';
+export * from './ast-mutator.js';
 import { DigitalTwin } from '@platform/core';
 import { generateId } from '@platform/shared';
 

@@ -1,6 +1,8 @@
 export * from './discrepancy-calculator.js';
 export * from './parameter-optimizer.js';
 export * from './analytics-importer.js';
+export * from './analytics-connector.js';
+export * from './continuous-tuner.js';
 
 import { Simulation } from '@platform/core';
 import { generateId } from '@platform/shared';

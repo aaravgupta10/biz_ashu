@@ -3,6 +3,8 @@ export * from './recommendation-generator.js';
 export * from './variant-generator.js';
 export * from './variant-comparator.js';
 export * from './report-generator.js';
+export * from './autonomous-optimizer.js';
+export * from './git-pr-generator.js';
 
 import { CognitiveState } from '@platform/core';
 import { generateId } from '@platform/shared';
