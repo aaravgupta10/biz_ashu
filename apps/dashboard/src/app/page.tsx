@@ -349,16 +349,53 @@ export default function HomePage() {
               border: '1px solid #334155',
             }}
           >
-            <h2
+            <div
               style={{
-                fontSize: '1.125rem',
-                fontWeight: '600',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
                 marginBottom: '1rem',
-                color: '#e2e8f0',
               }}
             >
-              Target Page HTML
-            </h2>
+              <h2
+                style={{
+                  fontSize: '1.125rem',
+                  fontWeight: '600',
+                  color: '#e2e8f0',
+                  margin: 0,
+                }}
+              >
+                Target Page HTML
+              </h2>
+              <select
+                onChange={(e) => {
+                  if (e.target.value === 'saas') {
+                    setHtmlInput(
+                      `<!DOCTYPE html><html><body><h1>SaaS Pricing</h1><button id="btn">Start Free Trial</button></body></html>`,
+                    );
+                  } else if (e.target.value === 'checkout') {
+                    setHtmlInput(SAMPLE_HTML);
+                  } else if (e.target.value === 'leadgen') {
+                    setHtmlInput(
+                      `<!DOCTYPE html><html><body><form><input id="email" placeholder="Work Email"/><button id="submit">Request Demo</button></form></body></html>`,
+                    );
+                  }
+                }}
+                style={{
+                  backgroundColor: '#0f172a',
+                  color: '#38bdf8',
+                  border: '1px solid #334155',
+                  borderRadius: '0.375rem',
+                  padding: '0.375rem 0.75rem',
+                  fontSize: '0.8125rem',
+                  cursor: 'pointer',
+                }}
+              >
+                <option value="checkout">Template: Express Checkout</option>
+                <option value="saas">Template: SaaS Pricing</option>
+                <option value="leadgen">Template: B2B Lead Gen</option>
+              </select>
+            </div>
             <textarea
               value={htmlInput}
               onChange={(e) => setHtmlInput(e.target.value)}

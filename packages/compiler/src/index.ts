@@ -10,6 +10,8 @@ export * from './interaction-compiler.js';
 export * from './twin-validator.js';
 export * from './site-compiler.js';
 export * from './ast-mutator.js';
+export * from './sample-templates.js';
+export * from './visual-renderer.js';
 import { DigitalTwin } from '@platform/core';
 import { generateId } from '@platform/shared';
 
