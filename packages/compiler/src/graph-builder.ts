@@ -31,9 +31,18 @@ export function convertSemanticNodeToComponents(
 ): Component[] {
   const childComponentIds = node.children ? node.children.map((child) => child.id) : [];
 
+  let name = `${node.type} Component`;
+  if (node.purpose) {
+    if (node.purpose.includes(': ')) {
+      name = `${node.purpose.split(': ')[1]} (${node.type})`;
+    } else if (!node.purpose.includes('Generic')) {
+      name = `${node.purpose} (${node.type})`;
+    }
+  }
+
   const currentComponent: Component = {
     id: node.id,
-    name: `${node.type} Component`,
+    name,
     type: node.type,
     purpose: node.purpose,
     metadata: {

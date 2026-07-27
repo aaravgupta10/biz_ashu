@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { PLATFORM_VERSION } from '@platform/shared';
 import { AttentionHeatmap, ComponentAttentionScoreUI } from './components/AttentionHeatmap';
 
@@ -310,22 +311,38 @@ export default function HomePage() {
             Engine v{PLATFORM_VERSION} | Synthetic Human Digital Twin Workspace
           </p>
         </div>
-        <button
-          onClick={handleRunSimulation}
-          disabled={isSimulating}
-          style={{
-            backgroundColor: '#0284c7',
-            color: '#ffffff',
-            fontWeight: '600',
-            padding: '0.75rem 1.5rem',
-            borderRadius: '0.5rem',
-            border: 'none',
-            cursor: isSimulating ? 'not-allowed' : 'pointer',
-            boxShadow: '0 4px 6px -1px rgba(14, 165, 233, 0.2)',
-          }}
-        >
-          {isSimulating ? 'Simulating Engine...' : 'Run Simulation Engine'}
-        </button>
+        <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+          <Link
+            href="/landing"
+            style={{
+              color: '#38bdf8',
+              textDecoration: 'none',
+              fontSize: '0.875rem',
+              fontWeight: '600',
+              border: '1px solid rgba(56, 189, 248, 0.3)',
+              padding: '0.5rem 1rem',
+              borderRadius: '0.375rem',
+            }}
+          >
+            🌐 View Marketing Portal
+          </Link>
+          <button
+            onClick={handleRunSimulation}
+            disabled={isSimulating}
+            style={{
+              backgroundColor: '#0284c7',
+              color: '#ffffff',
+              fontWeight: '600',
+              padding: '0.75rem 1.5rem',
+              borderRadius: '0.5rem',
+              border: 'none',
+              cursor: isSimulating ? 'not-allowed' : 'pointer',
+              boxShadow: '0 4px 6px -1px rgba(14, 165, 233, 0.2)',
+            }}
+          >
+            {isSimulating ? 'Simulating Engine...' : 'Run Simulation Engine'}
+          </button>
+        </div>
       </header>
 
       {/* Main Grid */}

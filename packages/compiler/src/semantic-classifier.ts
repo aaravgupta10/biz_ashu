@@ -98,44 +98,46 @@ export function determinePurpose(type: SemanticNodeType, element: RawElement): s
 
   switch (type) {
     case 'Headline':
-      return text ? `Heading: ${text}` : `Heading element (${element.tagName})`;
+      return text ? `Heading: ${text}` : `Heading (${element.tagName})`;
     case 'CTA':
       if (text) return `Call to action: ${text}`;
       if (attrs['value']) return `Call to action: ${attrs['value']}`;
       if (attrs['aria-label']) return `Call to action: ${attrs['aria-label']}`;
       return 'Call to action button';
     case 'Link':
+      if (text) return `${text} Link`;
       if (attrs['href']) return `Navigate to ${attrs['href']}`;
-      if (text) return `Link: ${text}`;
-      return 'Hyperlink element';
+      return 'Hyperlink Element';
     case 'Image':
       if (attrs['alt']) return `Image: ${attrs['alt']}`;
-      if (attrs['src']) return `Image source: ${attrs['src']}`;
-      return 'Visual image element';
+      if (attrs['src']) return `Image (${attrs['src']})`;
+      return 'Visual Image Element';
     case 'Form':
-      if (attrs['name']) return `Form: ${attrs['name']}`;
-      if (attrs['id']) return `Form: ${attrs['id']}`;
-      if (attrs['action']) return `Form submitting to ${attrs['action']}`;
-      return 'Form submission container';
+      if (attrs['id']) return `${attrs['id']} Form`;
+      if (attrs['name']) return `${attrs['name']} Form`;
+      return 'Form Container';
     case 'Input': {
-      const fieldName = attrs['placeholder'] || attrs['name'] || attrs['type'] || attrs['id'];
-      return fieldName ? `Input field for ${fieldName}` : 'User input control';
+      const label = attrs['placeholder'] || attrs['name'] || attrs['id'] || attrs['type'];
+      return label ? `${label} Input` : 'User Input Field';
     }
     case 'Navigation':
-      return text ? `Navigation: ${text}` : 'Navigation section';
+      return text ? `Navigation: ${text}` : 'Navigation Bar';
     case 'Header':
-      return 'Page or section header';
+      return 'Header Section';
     case 'Footer':
-      return 'Page or section footer';
+      return 'Footer Section';
     case 'Section':
-      return text ? `Section: ${text}` : 'Content section';
+      return text ? `Section: ${text}` : 'Content Section';
     case 'Article':
-      return text ? `Article: ${text}` : 'Standalone article content';
+      return text ? `Article: ${text}` : 'Article Block';
     case 'Main Content':
-      return 'Primary page content';
+      return 'Main Content Block';
     case 'GenericComponent':
     default:
-      return text ? `Content component: ${text}` : `Generic ${element.tagName} element`;
+      if (text) return `${text.substring(0, 20)} Component`;
+      if (attrs['id']) return `${attrs['id']} Component`;
+      if (attrs['class']) return `${attrs['class'].split(' ')[0]} Component`;
+      return `${element.tagName.toUpperCase()} Container`;
   }
 }
 
