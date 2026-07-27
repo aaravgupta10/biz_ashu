@@ -1,13 +1,15 @@
 {
   "files": [],
   "references": [
-    { "path": "packages/core" },
     { "path": "packages/shared" },
+    { "path": "packages/core" },
     { "path": "packages/compiler" },
-    { "path": "packages/runtime" },
     { "path": "packages/cognition" },
+    { "path": "packages/runtime" },
     { "path": "packages/recommendation" },
     { "path": "packages/calibration" },
+    { "path": "packages/cli" },
+    { "path": "packages/sdk" },
     { "path": "apps/api" },
     { "path": "apps/dashboard" }
   ]
