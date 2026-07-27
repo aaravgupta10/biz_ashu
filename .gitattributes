@@ -1,0 +1,6 @@
+# Set default behavior to automatic text conversion
+* text=auto
+
+# Keep lockfiles strictly LF for cross-platform pnpm CI compatibility
+pnpm-lock.yaml text eol=lf
+*.json text eol=lf
