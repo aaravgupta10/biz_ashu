@@ -39,7 +39,9 @@ import {
   compareSimulationVariants,
   runAutonomousOptimizer,
   generateGitPullRequestPatch,
+  generateCroAuditReport,
 } from '@platform/recommendation';
+import { saveSharedAuditReport, getSharedAuditReport } from './audit-store.js';
 
 const fastify = Fastify({
   logger: true,
@@ -483,6 +485,70 @@ fastify.post('/api/calibrate-live', async (request) => {
     benchmark,
     autoTuningResult,
   };
+});
+
+fastify.post('/api/reports/share', async (request) => {
+  const body = (request.body as { html?: string; personaName?: string }) || {};
+  const htmlInput = body.html && body.html.trim() !== '' ? body.html : DEFAULT_SAMPLE_HTML;
+
+  const domTree = parseHtml(htmlInput);
+  const rawElements = extractRawElements(domTree);
+  const semanticNodes = classifyRawElements(rawElements);
+  const page = buildPageGraph(semanticNodes, { name: 'Public Shared Page Target' });
+  const affordances = extractAllAffordances(semanticNodes);
+
+  const persona = ImmutablePersona.create({
+    id: generateId(),
+    name: body.personaName || 'Public Evaluator',
+    role: 'User',
+    personality: {
+      openness: 0.6,
+      conscientiousness: 0.8,
+      extraversion: 0.5,
+      agreeableness: 0.6,
+      neuroticism: 0.3,
+    },
+    cognitiveTraits: {
+      technicalFluency: 0.8,
+      domainFamiliarity: 0.75,
+      patienceThreshold: 0.5,
+      attentionSpan: 0.6,
+      visualAcuity: 0.85,
+      riskTolerance: 0.6,
+    },
+    demographics: {},
+    metadata: {},
+  });
+
+  const trace = runSimulationSession({ page, persona, affordances, maxSteps: 10 });
+  const frictionPatterns = detectFrictionPatterns(trace, page);
+  const recommendations = generateProductRecommendations(frictionPatterns);
+
+  const report = generateCroAuditReport({
+    page,
+    persona,
+    trace,
+    frictionPatterns,
+    recommendations,
+  });
+  const shared = saveSharedAuditReport(report);
+
+  return {
+    ...shared,
+    report,
+  };
+});
+
+fastify.get('/api/reports/public/:shareToken', async (request, reply) => {
+  const params = request.params as { shareToken: string };
+  const report = getSharedAuditReport(params.shareToken);
+
+  if (!report) {
+    reply.status(404);
+    return { error: 'CRO Audit Report not found' };
+  }
+
+  return { report };
 });
 
 const start = async () => {

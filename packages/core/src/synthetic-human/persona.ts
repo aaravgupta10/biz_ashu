@@ -64,6 +64,8 @@ export const personaSchema = z.object({
   metadata: z.record(z.unknown()).default({}),
 });
 
+export type PersonaInput = z.infer<typeof personaSchema>;
+
 /**
  * Interface representing a Persona profile for synthetic human agents.
  */

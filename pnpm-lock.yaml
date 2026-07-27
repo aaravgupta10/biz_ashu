@@ -135,6 +135,34 @@ importers:
         specifier: ^3.0.4
         version: 3.2.7(@types/node@22.20.1)(tsx@4.23.0)(yaml@2.9.0)
 
+  packages/cli:
+    dependencies:
+      '@platform/cognition':
+        specifier: workspace:*
+        version: link:../cognition
+      '@platform/compiler':
+        specifier: workspace:*
+        version: link:../compiler
+      '@platform/core':
+        specifier: workspace:*
+        version: link:../core
+      '@platform/recommendation':
+        specifier: workspace:*
+        version: link:../recommendation
+      '@platform/runtime':
+        specifier: workspace:*
+        version: link:../runtime
+      '@platform/shared':
+        specifier: workspace:*
+        version: link:../shared
+    devDependencies:
+      typescript:
+        specifier: ^5.7.3
+        version: 5.9.3
+      vitest:
+        specifier: ^3.0.4
+        version: 3.2.7(@types/node@22.20.1)(tsx@4.23.0)(yaml@2.9.0)
+
   packages/cognition:
     dependencies:
       '@platform/compiler':
@@ -222,6 +250,19 @@ importers:
       '@platform/core':
         specifier: workspace:*
         version: link:../core
+      '@platform/shared':
+        specifier: workspace:*
+        version: link:../shared
+    devDependencies:
+      typescript:
+        specifier: ^5.7.3
+        version: 5.9.3
+      vitest:
+        specifier: ^3.0.4
+        version: 3.2.7(@types/node@22.20.1)(tsx@4.23.0)(yaml@2.9.0)
+
+  packages/sdk:
+    dependencies:
       '@platform/shared':
         specifier: workspace:*
         version: link:../shared

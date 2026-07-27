@@ -1,6 +1,7 @@
 export * from './persona.js';
 export * from './cognitive-state.js';
 export * from './population-generator.js';
+export * from './persona-sampler.js';
 import { BaseEntity } from '../common/index.js';
 import { Persona } from './persona.js';
 
